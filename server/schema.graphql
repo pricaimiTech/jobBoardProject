@@ -1,5 +1,6 @@
 type Query {
     jobs: [Job!]
+    users: [User!]
 }
 
 type Company {
@@ -14,4 +15,10 @@ type Job {
     title: String!
     description: String!
     createdAt: String!
+}
+
+type User{
+    id: ID!
+    email: String!
+    password: String!
 }
