@@ -6,7 +6,8 @@ export const resolvers = {
     Query: {
         jobs: () => getJobs(),
         users: () => getUser(),
-        job: (_root, {id}) => getJob(id)
+        job: (_root, {id}) => getJob(id),
+        company: (_root, {id}) => getCompany(id)
     },
 
     Job: {
