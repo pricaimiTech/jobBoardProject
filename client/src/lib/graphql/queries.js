@@ -52,6 +52,16 @@ export async function getCompany(companyId) {
             id
             name
             description
+            jobs {
+            id
+            title
+            description
+            createdAt
+            company {
+                name
+                id
+            }
+            }
         }
     }
 `
