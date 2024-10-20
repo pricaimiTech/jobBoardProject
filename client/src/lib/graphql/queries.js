@@ -1,4 +1,4 @@
-import { GraphQLClient, gql} from "graphql-request";
+import { GraphQLClient, gql } from "graphql-request";
 
 const client = new GraphQLClient('http://localhost:9000/graphql')
 
@@ -10,12 +10,37 @@ export async function getJobs() {
             title
             description
             company {
-            id
-            name
+                id
+                name
             }
         }
     }
     `;
-    const {jobs} = await client.request(query)
+    const { jobs } = await client.request(query)
     return jobs
+}
+
+/**
+ * 
+ * @param {*} jobId irá receber o id do job que irá retornar
+ * @returns irá retornar o job cadastrado naquele id informado
+ */
+export async function getJob(jobId) {
+    const query = gql`
+    query Job($jobId: ID!) {
+        job(id: $jobId) {
+            id
+            description
+            title
+            company {
+            id
+            name
+            description
+            }
+            createdAt
+        }
+    }
+`
+    const {job} = await client.request(query, { jobId });
+    return job
 }
