@@ -6,6 +6,7 @@ import {
   getJob,
   getJobs,
   getJobsByCompany,
+  updateJob,
 } from "./db/jobs.js";
 import { getUser } from "./db/users.js";
 
@@ -35,6 +36,14 @@ export const resolvers = {
       return createJob({ companyId, title, description });
     },
     deleteJob: (__root, { id }) => deleteJob(id),
+
+    updateJob: (__root, { input: { id, title, description } }) => {
+      return updateJob({
+        id,
+        title,
+        description,
+      });
+    },
   },
 
   Job: {
