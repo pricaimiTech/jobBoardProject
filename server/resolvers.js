@@ -31,6 +31,13 @@ export const resolvers = {
   },
 
   Mutation: {
+    /**
+     *
+     * @param {*} _root
+     * @param {*} input irá trazer os dados do front para adicionar na criação do novo Job
+     * @param {*} user = context onde irá trazer a informação se o usuário está logado
+     * @returns cria o novo dado na base
+     */
     createJob: (_root, { input: { title, description } }, { user }) => {
       if (!user) {
         throw unauthorizedError("Missing authentication");
@@ -38,14 +45,36 @@ export const resolvers = {
       console.log("[createJob] context: ", user);
       return createJob({ companyId: user.companyId, title, description });
     },
-    deleteJob: (__root, { id }) => deleteJob(id),
+    deleteJob: async (__root, { id }, { user }) => {
+      if (!user) {
+        throw unauthorizedError("Missing authentication");
+      }
+      const job = await deleteJob(id, user.companyId);
+      if (!job) {
+        throw notFoundErro("No Job found with id " + id);
+      }
 
-    updateJob: (__root, { input: { id, title, description } }) => {
-      return updateJob({
+      return job;
+    },
+
+    updateJob: async (
+      __root,
+      { input: { id, title, description } },
+      { user }
+    ) => {
+      if (!user) {
+        throw unauthorizedError("Missing authentication");
+      }
+      const job = await updateJob({
         id,
         title,
         description,
+        companyId: user.companyId,
       });
+      if (!job) {
+        throw notFoundErro("No Job found with id " + id);
+      }
+      return job;
     },
   },
 
